@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ジェット・ゾウ</title>
+  <id>http://dozen.github.io/</id>
+  <updated>2016-06-03T12:46:57+09:00</updated>
+  <subtitle>ビューン🐘</subtitle>
+  <link href="http://dozen.github.io/"></link>
+  <author>
+    <name>ジェット・ゾウ</name>
+  </author>
+  <entry>
+    <title>はじめての投稿</title>
+    <updated>2016-06-03T12:13:00+09:00</updated>
+    <id>tag:,2016-06-03:/dozen.github.io/post/2016/06/03/2016_06_03.html</id>
+    <content type="html"></content>
+    <link href="http:/dozen.github.io/post/2016/06/03/2016_06_03.html"></link>
+  </entry>
+</feed>
