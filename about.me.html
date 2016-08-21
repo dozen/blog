@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="{{.Site.Root}}/bundle/index.css">
+        <title>about me</title>
+    </head>
+    <body>
+        <div class="container">
+            {{template "header" .}}
+            <div class="main page about">
+                <div class="header site">
+                    {{if .Site.Logo}}<div class="logo" style="background-image: url({{.Site.Logo}});"></div>{{end}}
+                    <div class="title">{{.Site.Title}}</div>
+                    <div class="subtitle">{{.Site.Subtitle}}</div>
+                </div>
+                <div class="content">
+                    <h3>dozen</h3>
+                    <p>どぜんと読みます</p>
+                    <p>http://jetzou.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <span class="copyright">
+                {{.Site.Title}} ©
+                <script type="text/javascript">
+                    document.write(new Date().getFullYear());
+                </script>
+            </span>
+            <span class="publish">Powered by <a href="http://www.inkpaper.io/" target="_blank">Ink</a></span>
+        </div>
+    </body>
+</html>
