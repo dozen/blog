@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>ジェットゾウ</title>
   <id>http://jetzou.com/</id>
-  <updated>2016-08-22T02:08:35+09:00</updated>
+  <updated>2016-08-25T14:13:39+09:00</updated>
   <subtitle>🚀ビューン🐘</subtitle>
   <link href="http://jetzou.com/"></link>
   <author>
     <name>ジェットゾウ</name>
   </author>
+  <entry>
+    <title>音楽の再生環境を変えた</title>
+    <updated>2016-08-25T13:00:00+09:00</updated>
+    <id>tag:jetzou.com,2016-08-25:/2016/08/25.html</id>
+    <content type="html">&lt;h1&gt;いままで: x-アプリ&lt;/h1&gt;&#xA;&#xA;&lt;p&gt;今まではパソコンかウォークマンで音楽を聴いていました．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;ウォークマンを使っていたのでx-アプリでCDを取り込んでいました．今の時代SONY製品を使っているならMedia Goでリッピングするのがいいと何かで読んだ気がしますが，全く知りません．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;ウォークマンを使っていたと言っても最近は使ってなかったのと，x-アプリでも音楽聴いていませんでした．たまにCDを買ったときにCDコンポで音楽を聴くくらい．そもそもノーミュージックノーライフみたいな人とは真逆の人間です．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;ただ最近は買ったCDが溜まってきたのと，音楽を聴きたくなった時にわざわざCDコンポにCD入れたりするのが面倒になってきたのでなんとかしたいなーと思っていました．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;ついでにx-アプリを使うのをやめました．普段使っているのはMBPなのでx-アプリ使えないし．&lt;/p&gt;&#xA;&#xA;&lt;h1&gt;これから: iTunes + Google Play Music&lt;/h1&gt;&#xA;&#xA;&lt;p&gt;x-アプリから乗り換えということで，今持っているCDは全部iTunesで取り込みなおしました．全部取り込み終えたらライブラリには88枚のアルバムが入っていました．こうやってプラットフォームを変えた時にCDを取り込み直すのが本当にバカバカしくてやっていられないです，もうこれきりになるといいな．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;これからはiTunesでCDを取り込み，パソコンで音楽を聴くときはiTunesで再生，スマホで聴くときはGoogle Play Musicでパソコン上のライブラリを同期して再生することにしました．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;今までスマホに音楽を入れたことがなかったのですが，結構便利そうです．スマホがすごいっていうかGoogle Play Musicがすごい．楽曲ファイルがあるディレクトリを指定すれば勝手にファイルをアップロードして曲情報取得してくれます．スマホにはPlay Musicをインストールするだけでいいのでとても楽．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;最初WAVEファイルで取り込んでいたんですが，Google Play Musicが対応してなかったのでALACで取り込み直しました．非圧縮やロスレス圧縮にこだわっているようなのですが余り耳が良くないのでストレージの無駄使いです完全に．&lt;/p&gt;&#xA;&#xA;&lt;h1&gt;おわりに&lt;/h1&gt;&#xA;&#xA;&lt;p&gt;手元にCDやISOが無いアルバムがいくつかあってとても悲しいです．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;今回の感想としては，もともと音楽を熱心に聴かないのでこの辺りが便利になったところで猛烈に嬉しいってことはありませんでした．&lt;/p&gt;&#xA;&#xA;&lt;p&gt;あと今回はじめてiTunesでアルバムを買いました．ムーンライダーズのDON&amp;rsquo;T TRUST OVER THIRTYです．&lt;/p&gt;&#xA;</content>
+    <link href="http://jetzou.com/2016/08/25.html"></link>
+    <author>
+      <name>dozen</name>
+    </author>
+  </entry>
   <entry>
     <title>Shell ScriptでCGIカウンター</title>
     <updated>2016-08-22T00:05:00+09:00</updated>
