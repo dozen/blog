@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+
+        <meta name="keywords" content="XML,golang,">
+        <meta name="description" content="Shift_JISのXMLをGoでパースする">
+        <title>Shift_JISのXMLをGoでパースする</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェットゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">Shift_JISのXMLをGoでパースする</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1476739440"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/XML/index.html">XML</a><a class="tag" href="/tag/golang/index.html">golang</a></span>
+                </section>
+                <article class="content"><h1>Go言語におけるXML文書の扱い方</h1>
+
+<p>UTF-8のXML文書の扱い方についてはここを参考にしました．</p>
+
+<p><a href="http://qiita.com/ono_matope/items/70080cc33b75152c5c2a">http://qiita.com/ono_matope/items/70080cc33b75152c5c2a</a></p>
+
+<h1>Shift_JISのXML文書</h1>
+
+<p>上のリンクを参考にしてXMLファイルをパースしようと思ったら，ファイルの文字コードがShift_JISだったのでうまくいきませんでした．</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;Shift_JIS&quot;?&gt;
+&lt;user&gt;
+	&lt;Name&gt;太郎ちゃん&lt;/Name&gt;
+	&lt;attr&gt;Male&lt;/attr&gt;
+	&lt;age&gt;20&lt;/age&gt;
+&lt;/user&gt;
+</code></pre>
+
+<p>このようなXMLファイルを次のようなコードでパースしようとしましたら失敗しました．</p>
+
+<pre><code>package main
+
+import (
+	&quot;os&quot;
+	&quot;fmt&quot;
+	&quot;encoding/xml&quot;
+)
+
+func main() {
+	fp, _ := os.Open(&quot;taro.xml&quot;)
+	defer fp.Close()
+
+	var user User
+	decoder := xml.NewDecoder(fp)
+	err = decoder.Decode(&amp;user)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Printf(&quot;%#v&quot;, user)
+}
+
+type User struct {
+	XMLName xml.Name `xml:&quot;user&quot;`
+	Name string
+	Gender string `xml:&quot;attr&quot;`
+	Age int `xml:&quot;age&quot;`
+}
+</code></pre>
+
+<pre><code>xml: encoding &quot;Shift_JIS&quot; declared but Decoder.CharsetReader is nil
+</code></pre>
+
+<p><code>Decoder.CharsetReader</code>がnilだと怒られています．
+<code>Decoder.CharsetReader</code>の型は<code>func(charset string, r io.Reader) (io.Reader, error)</code>となっています．よくわからないけど<code>Decoder.CharsetReader</code>部分でUTF-8に変換しながらUnMarshalしていると思うので，ここで<code>transform.Reader</code>を渡せば動くんじゃねと当てずっぽうで書いてみました．</p>
+
+<pre><code>package main
+
+import (
+	&quot;encoding/xml&quot;
+	&quot;fmt&quot;
+	&quot;golang.org/x/text/encoding/japanese&quot;
+	&quot;golang.org/x/text/transform&quot;
+	&quot;io&quot;
+	&quot;os&quot;
+)
+
+func main() {
+	fp, err := os.Open(&quot;taro.xml&quot;)
+	defer fp.Close()
+
+	var user User
+	decoder := xml.NewDecoder(fp)
+	decoder.CharsetReader = func(charset string, r io.Reader) (io.Reader, error) {
+		return transform.NewReader(r, japanese.ShiftJIS.NewDecoder()), nil
+	}
+	err = decoder.Decode(&amp;user)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Printf(&quot;%#v&quot;, user)
+}
+
+type User struct {
+	XMLName xml.Name `xml:&quot;user&quot;`
+	Name    string
+	Gender  string   `xml:&quot;attr&quot;`
+	Age     int      `xml:&quot;age&quot;`
+}
+
+type HTML struct {
+	XMLName xml.Name `xml:&quot;html&quot;`
+}
+</code></pre>
+
+<p><code>charset</code>にエンコーディングのタイプが渡されるので，CharsetReaderの中でエンコーディングごとに適した処理を書くのが本来のやり方っぽいですが，今回はShift_JISのXMLファイルをパースしたいだけなのでcharsetは無視しています．</p>
+
+<pre><code>main.User{XMLName:xml.Name{Space:&quot;&quot;, Local:&quot;user&quot;}, Name:&quot;太郎ちゃん&quot;, Gender:&quot;Male&quot;, Age:20}
+</code></pre>
+
+<p>これでShift_JISのXMLファイルをパースすることが出来ました．</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんです</div>
+                </section>
+                <section class="recommend">
+                    
+                    
+                    <section class="nav next">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/2016/08/25.html">音楽の再生環境を変えた</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェットゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.inkpaper.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+    </body>
+</html>
