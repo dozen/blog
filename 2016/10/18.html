@@ -101,8 +101,9 @@ type User struct {
 <pre><code>xml: encoding &quot;Shift_JIS&quot; declared but Decoder.CharsetReader is nil
 </code></pre>
 
-<p><code>Decoder.CharsetReader</code>がnilだと怒られています．
-<code>Decoder.CharsetReader</code>の型は<code>func(charset string, r io.Reader) (io.Reader, error)</code>となっています．よくわからないけど<code>Decoder.CharsetReader</code>部分でUTF-8に変換しながらUnMarshalしていると思うので，ここで<code>transform.Reader</code>を渡せば動くんじゃねと当てずっぽうで書いてみました．</p>
+<p><code>Decoder.CharsetReader</code>がnilだと怒られています．なんとなくですが<code>xml.NewDecoder()</code>で受け取ったio.Readerとパーサの間に挟まって文字コードをUTF-8に変換してるんじゃないかなと思います．</p>
+
+<p><code>Decoder.CharsetReader</code>の型を見ると，<code>func(charset string, r io.Reader) (io.Reader, error)</code>となっています．よくわからないけど<code>Decoder.CharsetReader</code>の戻り値が<code>transform.Reader</code>を返すような関数を実装すれば動きそうな感じがしたので，とりあえず書いてみたら動きました．</p>
 
 <pre><code>package main
 
@@ -136,10 +137,6 @@ type User struct {
 	Name    string
 	Gender  string   `xml:&quot;attr&quot;`
 	Age     int      `xml:&quot;age&quot;`
-}
-
-type HTML struct {
-	XMLName xml.Name `xml:&quot;html&quot;`
 }
 </code></pre>
 
