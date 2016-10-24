@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+
+        <meta name="keywords" content="golang,">
+        <meta name="description" content="Base128を作りました．">
+        <title>Base128を作りました．</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェットゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">Base128を作りました．</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1477267080"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/golang/index.html">golang</a></span>
+                </section>
+                <article class="content"><h1>Base128とは</h1>
+
+<p>英数字(a-z, A-Z, 0-9)とひらがな(あ-ん)の128文字を使ってバイト列をエンコードするものです．
+実用性はともかく，文字数はBase64より少なくなるというメリットがあります．
+デメリットは，エンコード後のデータ量がものすごく増えることと，元のデータ量に対して一定でないことです．</p>
+
+<p><a href="https://github.com/dozen/encoding" target="_blank">Github: dozen/encoding</a></p>
+
+<h1>使い方</h1>
+
+<h2>import</h2>
+
+<pre><code>import &quot;github.com/dozen/encoding/base128&quot;
+</code></pre>
+
+<h2>encode</h2>
+
+<pre><code>e := base128.NewEncoding(base128.StdEncoding)
+
+e.EncodeToString([]byte(&quot;Hello, world!&quot;)) //=&gt;kZtけふ8ぢg7どぺmふQお
+</code></pre>
+
+<h2>decode</h2>
+
+<pre><code>e := base128.NewEncoding(base128.StdEncoding)
+
+fmt.Printf(&quot;%s\n&quot;, e.Decode(&quot;kZtけふ8ぢg7どぺmふQお&quot;)) //=&gt;Hello, world!
+</code></pre>
+
+<h1>実装</h1>
+
+<p>Base64を参考にして作り始めたのですがとりあえず動くようにしようとあれこれしている間に全く別物になってしまいました．</p>
+
+<p>Base64の場合，64文字を用いるので6bitを表現できます．エンコード時には，元の8bitのバイト列を6bitに区切るために，3byteずつuintに格納し，6bitずつビットシフトしています</p>
+
+<pre><code>val := uint(src[si+0])&lt;&lt;16 | uint(src[si+1])&lt;&lt;8 | uint(src[si+2])
+
+dst[di+0] = enc.encode[val&gt;&gt;18&amp;0x3F]
+dst[di+1] = enc.encode[val&gt;&gt;12&amp;0x3F]
+dst[di+2] = enc.encode[val&gt;&gt;6&amp;0x3F]
+dst[di+3] = enc.encode[val&amp;0x3F]
+</code></pre>
+
+<p>こんなかんじです．<a href="https://golang.org/src/encoding/base64/base64.go" target="_blank">encoding/base64/base64.go</a>の100行目ぐらいのところです．</p>
+
+<p>これを参考にして，元の8bitのバイト列を7byteずつ取り出し，7bitずつ区切ることにしました．7byte=56bitなのでuintには収まる範囲です．</p>
+
+<pre><code>val :=	uint(src[si+0])&lt;&lt;48 |
+	uint(src[si+1])&lt;&lt;40 |
+	uint(src[si+2])&lt;&lt;32 |
+	uint(src[si+3])&lt;&lt;24 |
+	uint(src[si+4])&lt;&lt;16 |
+	uint(src[si+5])&lt;&lt;8 |
+	uint(src[si+6])
+
+dst[di+0] = enc.encode[val&gt;&gt;49&amp;0x7F]
+dst[di+1] = enc.encode[val&gt;&gt;42&amp;0x7F]
+dst[di+2] = enc.encode[val&gt;&gt;35&amp;0x7F]
+dst[di+3] = enc.encode[val&gt;&gt;28&amp;0x7F]
+dst[di+4] = enc.encode[val&gt;&gt;21&amp;0x7F]
+dst[di+5] = enc.encode[val&gt;&gt;14&amp;0x7F]
+dst[di+6] = enc.encode[val&gt;&gt;7&amp;0x7F]
+dst[di+7] = enc.encode[val&amp;0x7F]
+</code></pre>
+
+<p>このようになります．</p>
+
+<p>エンコード後の文字列にUTF-8を含むのでBase64そっくりそのままというわけにはいかず，そのへんで躓きました．</p>
+
+<p>また，Base64は3byteを4文字で表現する際に終端が4文字に満たないとき，<code>=</code>で埋めるという処理があります．<code>encoding/base64</code>では<code>NoPadding</code>を指定すれば<code>=</code>埋めをしないような処理にも出来ます．</p>
+
+<p>この終端の<code>=</code>埋め処理をBase128ではしていません．切り替えられるようにするべきですが，まだしていません．Base128において<code>=</code>をした場合，最大で6文字の<code>=</code>が並びます．これはちょっと嫌です．</p>
+
+<p>このBase128は使いみちが思いつきませんが，Base256というのも作ってみようかと思います．漢字を含めれば8bitを表現できそうですし，8bitで元のバイト列をnbitへ切り分ける，といった処理をしなくていいのでもっと簡単に作れるような気がします．</p>
+
+<p>そういえば，<code>uint</code>は環境によってサイズが変わるので，<code>uint64</code>を使わないと，32ビット環境でちゃんと動かないですね．これは直さないといけないです．🐘</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんです</div>
+                </section>
+                <section class="recommend">
+                    
+                    
+                    <section class="nav next">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/2016/10/18.html">Shift_JISのXMLをGoでパースする</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェットゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.inkpaper.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+    </body>
+</html>
