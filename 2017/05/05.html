@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+
+        <meta name="keywords" content="linux,systemd,Shell Script,">
+        <meta name="description" content="RaspberryPi2用のRTCもどきを作る">
+        <title>RaspberryPi2用のRTCもどきを作る</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェットゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">RaspberryPi2用のRTCもどきを作る</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1493931600"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/linux/index.html">linux</a><a class="tag" href="/tag/systemd/index.html">systemd</a><a class="tag" href="/tag/Shell%20Script/index.html">Shell Script</a></span>
+                </section>
+                <article class="content"><p>Raspberry Pi2にはRTCがありませんが、これによって再起動したときに時刻が <code>2017年1月1日</code> とかになります。</p>
+
+<p>システム時刻が現在時刻とかけ離れている場合、NTPによる同期が失敗することがあり、ラズパイを再起動するといつまでたっても正しい時刻に戻ってくれず大変困ります。</p>
+
+<p>RTCモジュール買えば良いんですが、再起動したときにササッとNTPに同期できるようにしたいだけなので、タダで済ませたいところです。</p>
+
+<p>そこで、再起動する直前の時刻時刻をファイルに書き出しておき、再起動後にセットすることでNTPと同期できる程度の差に抑えることにしました。</p>
+
+<p><a href="https://github.com/dozen/myrtc" target="_blank">dozen/myrtc - Github</a></p>
+
+<p>Raspberry Pi2にはArchlinuxを入れているので、systemdで使えるようにしました。</p>
+
+<p><code>myrtc</code> を <code>/usr/local/myrtc/</code> に置いて、 <code>myrtc.service</code> を <code>/etc/systemd/system/</code> に置きます。</p>
+
+<p><code>/usr/local/myrtc/myrtc store</code> で現在時刻をファイルに保存し、 <code>/usr/local/myrtc/myrtc restore</code> でファイルに書き出した時刻をシステム時刻にセットします。</p>
+
+<p><code>restore</code> にはroot権限が必要です。</p>
+
+<p><code>myrtc.service</code> はonshotタイプのサービスで、start時に<code>restore</code>コマンドを実行し、stop時に<code>store</code>コマンドを実行することで、起動時に<code>restore</code>、シャットダウン時に<code>store</code>を実行できるようにしています。</p>
+
+<p>再起動にかかる時間は考慮されていないので、myrtcでセットし直した時刻は、私のRaspberry Pi2でだいたい30秒くらい遅れます。storeかrestoreどちらかでその間に進む時刻を大体で加算すればもっと誤差が小さくなりそうですが、NTPで同期できればそれでいいので、ややこしいことはしていません。</p>
+
+<p>もし不慮のシャットダウンなども考慮したい場合は、cronで<code>myrtc store</code>を定期的に実行するか、 myrtcコマンドを書き換えて無限ループの中でスリープを挟みながら時刻をファイルに書き出し続ける、みたいにすればいい感じになりそうです。</p>
+
+<p>もし後者のmyrtcを書き換えるパターンを実践する場合は、 <code>myrtc.service</code> を書き換える必要がありますね。</p>
+
+<p>ともかくこれでRaspberry Pi2を再起動したとき、毎回 <code>date -s …</code> と打ち込まずに済むようになりました。🐘</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんです</div>
+                </section>
+                <section class="recommend">
+                    
+                    
+                    <section class="nav next">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/2016/10/24.html">Base128を作りました．</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェットゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.inkpaper.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+    </body>
+</html>

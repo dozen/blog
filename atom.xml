@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>ジェットゾウ</title>
   <id>http://jetzou.com/</id>
-  <updated>2016-10-24T09:02:25+09:00</updated>
+  <updated>2017-05-05T05:03:33+09:00</updated>
   <subtitle>🚀ビューン🐘</subtitle>
   <link href="http://jetzou.com/"></link>
   <author>
     <name>ジェットゾウ</name>
   </author>
+  <entry>
+    <title>RaspberryPi2用のRTCもどきを作る</title>
+    <updated>2017-05-05T06:00:00+09:00</updated>
+    <id>tag:jetzou.com,2017-05-05:/2017/05/05.html</id>
+    <content type="html">&lt;p&gt;Raspberry Pi2にはRTCがありませんが、これによって再起動したときに時刻が &lt;code&gt;2017年1月1日&lt;/code&gt; とかになります。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;システム時刻が現在時刻とかけ離れている場合、NTPによる同期が失敗することがあり、ラズパイを再起動するといつまでたっても正しい時刻に戻ってくれず大変困ります。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;RTCモジュール買えば良いんですが、再起動したときにササッとNTPに同期できるようにしたいだけなので、タダで済ませたいところです。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;そこで、再起動する直前の時刻時刻をファイルに書き出しておき、再起動後にセットすることでNTPと同期できる程度の差に抑えることにしました。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;a href=&#34;https://github.com/dozen/myrtc&#34; target=&#34;_blank&#34;&gt;dozen/myrtc - Github&lt;/a&gt;&lt;/p&gt;&#xA;&#xA;&lt;p&gt;Raspberry Pi2にはArchlinuxを入れているので、systemdで使えるようにしました。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;code&gt;myrtc&lt;/code&gt; を &lt;code&gt;/usr/local/myrtc/&lt;/code&gt; に置いて、 &lt;code&gt;myrtc.service&lt;/code&gt; を &lt;code&gt;/etc/systemd/system/&lt;/code&gt; に置きます。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;code&gt;/usr/local/myrtc/myrtc store&lt;/code&gt; で現在時刻をファイルに保存し、 &lt;code&gt;/usr/local/myrtc/myrtc restore&lt;/code&gt; でファイルに書き出した時刻をシステム時刻にセットします。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;code&gt;restore&lt;/code&gt; にはroot権限が必要です。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;code&gt;myrtc.service&lt;/code&gt; はonshotタイプのサービスで、start時に&lt;code&gt;restore&lt;/code&gt;コマンドを実行し、stop時に&lt;code&gt;store&lt;/code&gt;コマンドを実行することで、起動時に&lt;code&gt;restore&lt;/code&gt;、シャットダウン時に&lt;code&gt;store&lt;/code&gt;を実行できるようにしています。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;再起動にかかる時間は考慮されていないので、myrtcでセットし直した時刻は、私のRaspberry Pi2でだいたい30秒くらい遅れます。storeかrestoreどちらかでその間に進む時刻を大体で加算すればもっと誤差が小さくなりそうですが、NTPで同期できればそれでいいので、ややこしいことはしていません。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;もし不慮のシャットダウンなども考慮したい場合は、cronで&lt;code&gt;myrtc store&lt;/code&gt;を定期的に実行するか、 myrtcコマンドを書き換えて無限ループの中でスリープを挟みながら時刻をファイルに書き出し続ける、みたいにすればいい感じになりそうです。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;もし後者のmyrtcを書き換えるパターンを実践する場合は、 &lt;code&gt;myrtc.service&lt;/code&gt; を書き換える必要がありますね。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;ともかくこれでRaspberry Pi2を再起動したとき、毎回 &lt;code&gt;date -s …&lt;/code&gt; と打ち込まずに済むようになりました。🐘&lt;/p&gt;&#xA;</content>
+    <link href="http://jetzou.com/2017/05/05.html"></link>
+    <author>
+      <name>dozen</name>
+    </author>
+  </entry>
   <entry>
     <title>Base128を作りました．</title>
     <updated>2016-10-24T08:58:00+09:00</updated>
