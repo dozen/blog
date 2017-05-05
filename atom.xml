@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>ジェットゾウ</title>
   <id>http://jetzou.com/</id>
-  <updated>2017-05-05T05:03:33+09:00</updated>
+  <updated>2017-05-06T00:35:03+09:00</updated>
   <subtitle>🚀ビューン🐘</subtitle>
   <link href="http://jetzou.com/"></link>
   <author>
     <name>ジェットゾウ</name>
   </author>
+  <entry>
+    <title>systemd-modules-loadがコケる</title>
+    <updated>2017-05-06T00:30:00+09:00</updated>
+    <id>tag:jetzou.com,2017-05-06:/2017/05/06.html</id>
+    <content type="html">&lt;p&gt;&lt;code&gt;bcm2708-rng&lt;/code&gt;はラズパイのハードウェア乱数生成器を使用するためのカーネルモジュールですが、それが読み込めて無くて &lt;code&gt;systemd-modules_load.service&lt;/code&gt;がコケていました。&lt;/p&gt;&#xA;&#xA;&lt;pre&gt;&lt;code&gt;● systemd-modules-load.service - Load Kernel Modules&#xA;   Loaded: loaded (/usr/lib/systemd/system/systemd-modules-load.service; static; vendor preset: disabled)&#xA;   Active: failed (Result: exit-code) since Wed 2017-02-01 10:11:51 JST; 20s ago&#xA;     Docs: man:systemd-modules-load.service(8)&#xA;           man:modules-load.d(5)&#xA;  Process: 850 ExecStart=/usr/lib/systemd/systemd-modules-load (code=exited, status=1/FAILURE)&#xA; Main PID: 850 (code=exited, status=1/FAILURE)&#xA;&#xA; 2月 01 10:11:51 pi systemd[1]: Starting Load Kernel Modules...&#xA; 2月 01 10:11:51 pi systemd-modules-load[850]: Failed to find module &#39;bcm2708-rng&#39;&#xA; 2月 01 10:11:51 pi systemd[1]: systemd-modules-load.service: Main process exited, code=exited, status=1/FAILURE&#xA; 2月 01 10:11:51 pi systemd[1]: Failed to start Load Kernel Modules.&#xA; 2月 01 10:11:51 pi systemd[1]: systemd-modules-load.service: Unit entered failed state.&#xA; 2月 01 10:11:51 pi systemd[1]: systemd-modules-load.service: Failed with result &#39;exit-code&#39;.&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&#xA;&lt;p&gt;いつの間にかサポートされなくなってたみたいです。&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;a href=&#34;https://archlinuxarm.org/forum/viewtopic.php?f=64&amp;t=10153&#34; target=&#34;_blank&#34;&gt;Arch Linux ARM • View topic - Solved: RPi 2: bcm2708-rng module missing after update&lt;/a&gt;&lt;/p&gt;&#xA;&#xA;&lt;p&gt;&lt;code&gt;/etc/modules-load.d/raspberrypi.conf&lt;/code&gt;に読み込むカーネルモジュールを列挙していましたが、&lt;code&gt;bcm2708-rng&lt;/code&gt;の代わりに&lt;code&gt;bcm2835-rng&lt;/code&gt;を使うよう変更しました。&lt;/p&gt;&#xA;&#xA;&lt;pre&gt;&lt;code&gt;● systemd-modules-load.service - Load Kernel Modules&#xA;   Loaded: loaded (/usr/lib/systemd/system/systemd-modules-load.service; static; vendor preset: disabled)&#xA;   Active: active (exited) since Sat 2017-05-06 00:31:18 JST; 2s ago&#xA;     Docs: man:systemd-modules-load.service(8)&#xA;           man:modules-load.d(5)&#xA;  Process: 2385 ExecStart=/usr/lib/systemd/systemd-modules-load (code=exited, status=0/SUCCESS)&#xA; Main PID: 2385 (code=exited, status=0/SUCCESS)&#xA;&#xA; 5月 06 00:31:18 pi systemd[1]: Starting Load Kernel Modules...&#xA; 5月 06 00:31:18 pi systemd[1]: Started Load Kernel Modules.&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&#xA;&lt;p&gt;無事systemd-modules-loadが起動できました🐘&lt;/p&gt;&#xA;</content>
+    <link href="http://jetzou.com/2017/05/06.html"></link>
+    <author>
+      <name>dozen</name>
+    </author>
+  </entry>
   <entry>
     <title>RaspberryPi2用のRTCもどきを作る</title>
     <updated>2017-05-05T06:00:00+09:00</updated>
