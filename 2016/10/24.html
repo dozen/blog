@@ -81,7 +81,7 @@ fmt.Printf(&quot;%s\n&quot;, e.Decode(&quot;kZtけふ8ぢg7どぺmふQお&quot;)
 
 <p>Base64を参考にして作り始めたのですがとりあえず動くようにしようとあれこれしている間に全く別物になってしまいました．</p>
 
-<p>Base64の場合，64文字を用いるので6bitを表現できます．エンコード時には，元の8bitのバイト列を6bitに区切るために，3byteずつuintに格納し，6bitずつビットシフトしています</p>
+<p>Base64の場合，64文字を用いるので6bitを表現できます．エンコード時には，元の8bitのバイト列を6bitに区切るために，4byteずつuintに格納してから6bitずつビットシフトしています。</p>
 
 <pre><code>val := uint(src[si+0])&lt;&lt;16 | uint(src[si+1])&lt;&lt;8 | uint(src[si+2])
 
