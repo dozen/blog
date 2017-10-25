@@ -111,4 +111,4 @@ type User struct {
 main.User{XMLName:xml.Name{Space:"", Local:"user"}, Name:"太郎ちゃん", Gender:"Male", Age:20}
 ```
 
-これでShift_JISのXMLファイルをパースすることが出来ました．
+これでShift_JISのXMLファイルをパースすることが出来ました．🐘
