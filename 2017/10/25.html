@@ -19,10 +19,32 @@
     var root = '';
 </script>
 
+<script type="text/javascript">
+    var conn, reloadTimer, connectTimer;
+    var connect = function() {
+        conn = new WebSocket('ws://' + location.host + '/live');
+        conn.onmessage = function(event) {
+            if (event.data === 'change') {
+                if (reloadTimer) clearTimeout(reloadTimer);
+                reloadTimer = setTimeout(function() {
+                    window.location.reload();
+                }, 200);
+            }
+        };
+        conn.onclose = function() {
+            if (connectTimer) clearTimeout(connectTimer);
+            connectTimer = setTimeout(function() {
+                connect();
+            }, 1000);
+        };
+    };
+    connect();
+</script>
+
 
         <meta name="keywords" content="ISUCON,">
         <meta name="description" content="ISUCON 7 予選1日目を1位で通過して来ました">
-        <title>ISUCON 7 予選1日目を1位で通過して来ました</title>
+        <title>ISUCON 7 予選1日目を1位で通過して来ました | ジェットゾウ</title>
     </head>
     <body>
         <article class="container">
