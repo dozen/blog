@@ -1,4 +1,4 @@
-title: ISUCON 7 予選1日目を1位で通過して来ました
+title: ISUCON 7 で優勝してきました
 date: 2017-11-29 00:00:00
 author: me
 preview: チームMSAとしてISUCON 7 本戦に出場しました
