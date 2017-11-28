@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>ジェットゾウ</title>
   <id>http://jetzou.com</id>
-  <updated>2017-10-25T23:51:11+09:00</updated>
+  <updated>2017-11-29T00:24:23+09:00</updated>
   <subtitle>🚀ビューン🐘</subtitle>
   <link href="http://jetzou.com"></link>
   <author>
     <name>ジェットゾウ</name>
   </author>
   <entry>
+    <title>ISUCON 7 で優勝してきました</title>
+    <updated>2017-11-29T00:00:00+09:00</updated>
+    <id>tag:jetzou.com,2017-11-29:/2017/11/29.html</id>
+    <content type="html">&lt;p&gt;チームMSAとしてISUCON 7 本戦に出場しました&lt;/p&gt;&#xA;</content>
+    <link href="http://jetzou.com/2017/11/29.html"></link>
+    <author>
+      <name>dozen</name>
+    </author>
+  </entry>
+  <entry>
     <title>ISUCON 7 予選1日目を1位で通過して来ました</title>
-    <updated>2017-10-25T23:40:00+09:00</updated>
-    <id>tag:jetzou.com,2017-10-25:/2017/10/25.html</id>
+    <updated>2017-10-26T03:00:00+09:00</updated>
+    <id>tag:jetzou.com,2017-10-26:/2017/10/26.html</id>
     <content type="html">&lt;p&gt;チームMSAのインフラ担当として参加して来ました&lt;/p&gt;&#xA;</content>
-    <link href="http://jetzou.com/2017/10/25.html"></link>
+    <link href="http://jetzou.com/2017/10/26.html"></link>
     <author>
       <name>dozen</name>
     </author>
@@ -93,16 +103,6 @@
     <id>tag:jetzou.com,2016-06-25:/2016/06/25.html</id>
     <content type="html">&lt;p&gt;Plugin::Munin, Plugin::Munin::Frameworkを使ってMunin pluginを自作する&lt;/p&gt;&#xA;</content>
     <link href="http://jetzou.com/2016/06/25.html"></link>
-    <author>
-      <name>dozen</name>
-    </author>
-  </entry>
-  <entry>
-    <title>InkPaperとGithub Pagesの使い方</title>
-    <updated>2016-06-05T06:14:00+09:00</updated>
-    <id>tag:jetzou.com,2016-06-05:/2016/06/05.html</id>
-    <content type="html">&lt;p&gt;InkPpaerでブログを生成して, Github Pagesにアップロードするまで&lt;/p&gt;&#xA;</content>
-    <link href="http://jetzou.com/2016/06/05.html"></link>
     <author>
       <name>dozen</name>
     </author>

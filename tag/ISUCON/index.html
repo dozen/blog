@@ -19,28 +19,6 @@
     var root = '';
 </script>
 
-<script type="text/javascript">
-    var conn, reloadTimer, connectTimer;
-    var connect = function() {
-        conn = new WebSocket('ws://' + location.host + '/live');
-        conn.onmessage = function(event) {
-            if (event.data === 'change') {
-                if (reloadTimer) clearTimeout(reloadTimer);
-                reloadTimer = setTimeout(function() {
-                    window.location.reload();
-                }, 200);
-            }
-        };
-        conn.onclose = function() {
-            if (connectTimer) clearTimeout(connectTimer);
-            connectTimer = setTimeout(function() {
-                connect();
-            }, 1000);
-        };
-    };
-    connect();
-</script>
-
 
         <meta name="keywords" content="ジェットゾウ, 🚀ビューン🐘">
         <meta name="description" content="🚀ビューン🐘">
@@ -64,13 +42,13 @@
                 <header class="header site">
                     
                         <h1 class="tag">ISUCON</h1>
-                        <h2 class="tag-sub">1 記事</h2>
+                        <h2 class="tag-sub">2 記事</h2>
                     
                 </header>
                 <ul class="article-list">
                     
                     <li class="article">
-                        <a class="title" href="/2017/10/25.html">ISUCON 7 予選1日目を1位で通過して来ました</a>
+                        <a class="title" href="/2017/10/26.html">ISUCON 7 予選1日目を1位で通過して来ました</a>
                         
                         <section class="preview content"><p>チームMSAのインフラ担当として参加して来ました</p>
 </section>
@@ -78,7 +56,24 @@
                             <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
                             <a class="name" href="/about.me.html">dozen</a>
                             
-                            <span class="date" data-time="1508942400"><span class="from"></span></span>
+                            <span class="date" data-time="1508954400"><span class="from"></span></span>
+                            
+                            <span class="tags">
+                            <a class="tag" href="/tag/ISUCON/index.html">ISUCON</a>
+                            </span>
+                        </section>
+                    </li>
+                    
+                    <li class="article">
+                        <a class="title" href="/2017/11/29.html">ISUCON 7 で優勝してきました</a>
+                        
+                        <section class="preview content"><p>チームMSAとしてISUCON 7 本戦に出場しました</p>
+</section>
+                        <section class="info">
+                            <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                            <a class="name" href="/about.me.html">dozen</a>
+                            
+                            <span class="date" data-time="1511881200"><span class="from"></span></span>
                             
                             <span class="tags">
                             <a class="tag" href="/tag/ISUCON/index.html">ISUCON</a>
