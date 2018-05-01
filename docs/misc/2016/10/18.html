@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<meta name="renderer" content="webkit">
+<meta name="google" value="notranslate">
+<meta name="robots" content="index,follow">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ジェット・ゾウ">
+<meta name="twitter:description" content="🚀ビューン🐘">
+<meta name="twitter:image:src" content="http:/jetzou.com/images/avatar.png">
+
+<meta property="og:url" content="http:/jetzou.com">
+<meta property="og:title" content="ジェット・ゾウ">
+<meta property="og:description" content="🚀ビューン🐘">
+<meta property="og:site_name" content="ジェット・ゾウ">
+<meta property="og:image" content="http:/jetzou.com/images/avatar.png">
+<meta property="og:type" content="website">
+<meta name="robots" content="noodp">
+
+<meta itemprop="name" content="ジェット・ゾウ">
+<meta itemprop="description" content="🚀ビューン🐘">
+<meta itemprop="image" content="http:/jetzou.com/images/avatar.png">
+
+<link rel="canonical" href="http:/jetzou.com">
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+<script type="text/javascript">
+    var conn, reloadTimer, connectTimer;
+    var connect = function() {
+        conn = new WebSocket('ws://' + location.host + '/live');
+        conn.onmessage = function(event) {
+            if (event.data === 'change') {
+                if (reloadTimer) clearTimeout(reloadTimer);
+                reloadTimer = setTimeout(function() {
+                    window.location.reload();
+                }, 200);
+            }
+        };
+        conn.onclose = function() {
+            if (connectTimer) clearTimeout(connectTimer);
+            connectTimer = setTimeout(function() {
+                connect();
+            }, 1000);
+        };
+    };
+    connect();
+</script>
+
+
+        <meta name="keywords" content="XML,golang,">
+        <meta name="description" content="Shift_JISのXMLをGoでパースする">
+        <meta name="author" content="dozen">
+        <title>Shift_JISのXMLをGoでパースする</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェット・ゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">Shift_JISのXMLをGoでパースする</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1476739440"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/XML/index.html">XML</a><a class="tag" href="/tag/golang/index.html">golang</a></span>
+                </section>
+                <article class="content"><h1>Go言語におけるXML文書の扱い方</h1>
+
+<p>UTF-8のXML文書の扱い方についてはここを参考にしました．</p>
+
+<p><a href="http://qiita.com/ono_matope/items/70080cc33b75152c5c2a">http://qiita.com/ono_matope/items/70080cc33b75152c5c2a</a></p>
+
+<h1>Shift_JISのXML文書</h1>
+
+<p>上のリンクを参考にしてXMLファイルをパースしようと思ったら，ファイルの文字コードがShift_JISだったのでうまくいきませんでした．</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;Shift_JIS&quot;?&gt;
+&lt;user&gt;
+	&lt;Name&gt;太郎ちゃん&lt;/Name&gt;
+	&lt;attr&gt;Male&lt;/attr&gt;
+	&lt;age&gt;20&lt;/age&gt;
+&lt;/user&gt;
+</code></pre>
+
+<p>このようなXMLファイルを次のようなコードでパースしようとしましたら失敗しました．</p>
+
+<pre><code>package main
+
+import (
+	&quot;os&quot;
+	&quot;fmt&quot;
+	&quot;encoding/xml&quot;
+)
+
+func main() {
+	fp, _ := os.Open(&quot;taro.xml&quot;)
+	defer fp.Close()
+
+	var user User
+	decoder := xml.NewDecoder(fp)
+	err = decoder.Decode(&amp;user)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Printf(&quot;%#v&quot;, user)
+}
+
+type User struct {
+	XMLName xml.Name `xml:&quot;user&quot;`
+	Name string
+	Gender string `xml:&quot;attr&quot;`
+	Age int `xml:&quot;age&quot;`
+}
+</code></pre>
+
+<pre><code>xml: encoding &quot;Shift_JIS&quot; declared but Decoder.CharsetReader is nil
+</code></pre>
+
+<p><code>Decoder.CharsetReader</code>がnilだと怒られています．なんとなくですが<code>xml.NewDecoder()</code>で受け取ったio.Readerとパーサの間に挟まって文字コードをUTF-8に変換してるんじゃないかなと思います．</p>
+
+<p><code>Decoder.CharsetReader</code>の型を見ると，<code>func(charset string, r io.Reader) (io.Reader, error)</code>となっています．よくわからないけど<code>Decoder.CharsetReader</code>の戻り値が<code>transform.Reader</code>を返すような関数を実装すれば動きそうな感じがしたので，とりあえず書いてみたら動きました．</p>
+
+<pre><code>package main
+
+import (
+	&quot;encoding/xml&quot;
+	&quot;fmt&quot;
+	&quot;golang.org/x/text/encoding/japanese&quot;
+	&quot;golang.org/x/text/transform&quot;
+	&quot;io&quot;
+	&quot;os&quot;
+)
+
+func main() {
+	fp, err := os.Open(&quot;taro.xml&quot;)
+	defer fp.Close()
+
+	var user User
+	decoder := xml.NewDecoder(fp)
+	decoder.CharsetReader = func(charset string, r io.Reader) (io.Reader, error) {
+		return transform.NewReader(r, japanese.ShiftJIS.NewDecoder()), nil
+	}
+	err = decoder.Decode(&amp;user)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Printf(&quot;%#v&quot;, user)
+}
+
+type User struct {
+	XMLName xml.Name `xml:&quot;user&quot;`
+	Name    string
+	Gender  string   `xml:&quot;attr&quot;`
+	Age     int      `xml:&quot;age&quot;`
+}
+</code></pre>
+
+<p><code>charset</code>にエンコーディングのタイプが渡されるので，CharsetReaderの中でエンコーディングごとに適した処理を書くのが本来のやり方っぽいですが，今回はShift_JISのXMLファイルをパースしたいだけなのでcharsetは無視しています．</p>
+
+<pre><code>main.User{XMLName:xml.Name{Space:&quot;&quot;, Local:&quot;user&quot;}, Name:&quot;太郎ちゃん&quot;, Gender:&quot;Male&quot;, Age:20}
+</code></pre>
+
+<p>これでShift_JISのXMLファイルをパースすることが出来ました．🐘</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんとよみます</div>
+                </section>
+                <section class="recommend">
+                    
+                    <section class="nav prev more">
+                        <div class="head">新しい記事</div>
+                        <a class="link" href="/misc/2016/10/24.html">Base128を作りました．</a>
+                    </section>
+                    
+                    
+                    <section class="nav next more">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/misc/2016/08/25.html">音楽の再生環境を変えた</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェット・ゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.chole.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+        <div id="go_top" style="position:fixed; LEFT:85%; bottom:50px">
+            <svg width="30" height="30" viewBox="0 0 878 1024">
+                <path fill="#8a8a8a" d="M733.714 511.429c0-9.714-3.429-18.857-10.286-25.714l-258.857-258.857c-6.857-6.857-16-10.286-25.714-10.286s-18.857 3.429-25.714 10.286l-258.857 258.857c-6.857 6.857-10.286 16-10.286 25.714s3.429 18.857 10.286 25.714l52 52c6.857 6.857 16 10.286 25.714 10.286s18.857-3.429 25.714-10.286l108-108v286.857c0 20 16.571 36.571 36.571 36.571h73.143c20 0 36.571-16.571 36.571-36.571v-286.857l108 108c6.857 6.857 16 10.857 25.714 10.857s18.857-4 25.714-10.857l52-52c6.857-6.857 10.286-16 10.286-25.714zM877.714 512c0 242.286-196.571 438.857-438.857 438.857s-438.857-196.571-438.857-438.857 196.571-438.857 438.857-438.857 438.857 196.571 438.857 438.857z"></path>
+            </svg>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+site:
+    title: "ジェット・ゾウ"
+    subtitle: "🚀ビューン🐘"
+    limit: 10
+    theme: theme
+    lang: ja
+    url: "http:/jetzou.com/"
+    comment: jet-zou
+    #logo: "-/images/avatar.png"
+    link: "{year}/{month}/{day}.html"
+    logo: "-/images/avatar.png"
+
+authors:
+    me:
+        id: "me"
+        name: "dozen"
+        intro: "どぜんとよみます"
+        avatar: "-/images/avatar.png"
+
+build:
+    port: 8000
+    # Copied files to public folder when build
+    copy:
+        - "source/images"
+    output: docs
+    # Excuted command when use 'ink publish'
+    publish: |
+        git add . -A
+        git commit -m "update"
+        git push origin

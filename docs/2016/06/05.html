@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<meta name="renderer" content="webkit">
+<meta name="google" value="notranslate">
+<meta name="robots" content="index,follow">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ジェット・ゾウ">
+<meta name="twitter:description" content="🚀ビューン🐘">
+<meta name="twitter:image:src" content="http:/jetzou.com/images/avatar.png">
+
+<meta property="og:url" content="http:/jetzou.com">
+<meta property="og:title" content="ジェット・ゾウ">
+<meta property="og:description" content="🚀ビューン🐘">
+<meta property="og:site_name" content="ジェット・ゾウ">
+<meta property="og:image" content="http:/jetzou.com/images/avatar.png">
+<meta property="og:type" content="website">
+<meta name="robots" content="noodp">
+
+<meta itemprop="name" content="ジェット・ゾウ">
+<meta itemprop="description" content="🚀ビューン🐘">
+<meta itemprop="image" content="http:/jetzou.com/images/avatar.png">
+
+<link rel="canonical" href="http:/jetzou.com">
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+
+        <meta name="keywords" content="golang,github,">
+        <meta name="description" content="InkPaperとGithub Pagesの使い方">
+        <meta name="author" content="dozen">
+        <title>InkPaperとGithub Pagesの使い方</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェット・ゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">InkPaperとGithub Pagesの使い方</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1465074840"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/golang/index.html">golang</a><a class="tag" href="/tag/github/index.html">github</a></span>
+                </section>
+                <article class="content"><h2>InkPaperの使い方</h2>
+
+<p><a href="https://github.com/InkProject/ink#introduce">InkPaperのREADME</a>を読めばだいたい分かる.</p>
+
+<h3>InkPaperをインストール</h3>
+
+<p><a href="http://www.inkpaper.io/">http://www.inkpaper.io/</a>から自分の環境に合ったものをダウンロードします. zipファイルを解凍すればインストールは完了です.</p>
+
+<h3>設定ファイルを編集する</h3>
+
+<p><code>blog/config.yml</code>を編集します.</p>
+
+<pre><code>site:
+    title: ジェット・ゾウ #ブログのタイトル
+    subtitle: サブタイトル #タイトルの下にチョロンと表示されます
+    # logo: /images/avatar.jpg #トップページに表示される自分のアイコン
+    limit: 10 
+    theme: theme
+    disqus: somebody
+    lang: en
+    url: http://jetzou.com/
+    # root: /blog
+
+authors:
+    me:
+        name: dozen
+        intro: どぜんと読みます
+        avatar: /images/avatar.jpg
+
+build:
+    port: 8000
+    # Copied files to public folder when build
+    copy:
+        - theme/bundle
+        - theme/favicon.ico
+        - theme/robots.txt
+        - source/images
+    # Excuted command when use 'ink publish'
+    publish: |
+        git add . -A
+        git commit -m &quot;update&quot;
+        git push origin
+</code></pre>
+
+<p><code>url</code>と<code>root</code>だけ気をつければあとは適当で大丈夫. 今回は<code>http://jetzou.com/</code>で公開したいので<code>url: http://jetzou.com/&quot;</code>としました. <code>disqus</code>はコメント機能を提供してくれるDISQUSのアカウントを指定するんですが, 今回はスキップ.</p>
+
+<p><code>lang</code>は今のところ中国語と英語にしか対応していないみたいなので, <code>en</code>を指定しました.</p>
+
+<p>設定ファイルはこんな感じで大丈夫そうです.</p>
+
+<h3>記事を書く</h3>
+
+<p>記事を置く場所は<code>blog/source</code>です.</p>
+
+<p>インストールした状態ではサンプルページの<code>blog/source/ink-blog-tool-en.md</code>と<code>blog/source/ink-blog-tool.md</code>があります. 記事を書くまえにこのファイルをみて, 参考にするといいです. 公開する前にこの2つのファイルは消しておきます.</p>
+
+<pre><code>title: Article Title
+date: Year-Month-Day Hour:Minute:Second #Created Time，Support TimeZone, such as &quot; +0800&quot;
+update: Year-Month-Day Hour:Minute:Second #Updated Time，Optional，Support TimeZone, such as &quot; +0800&quot;
+author: AuthorID
+cover: Article Cover Path #Optional
+draft: false #If Draft，Optional
+top: false #Place article to top, Optional
+preview: Article Preview，Also use &lt;!--more--&gt; to split in body #Optional
+tags: #Optional
+    - Tag1
+    - Tag2
+
+---
+
+Markdown Format's Body
+</code></pre>
+
+<p><code>date</code>は投稿日時, <code>update</code>は更新日時です. <code>update</code>は不要ですが<code>date</code>は必須です. トップページなどを生成する際に<code>date</code>をもとに記事をソートするためです. フォーマットは<code>2016-06-01 12:00:00</code>みたいな感じです. ちゃんと秒まで指定しないとエラーが出ます.</p>
+
+<p><code>author</code>は<code>blog/config.yml</code>で指定した<code>authors</code>を指定します. デフォルトだと<code>me</code>です.</p>
+
+<p><code>cover</code>はよくわかんないです. アイキャッチかな?</p>
+
+<p><code>draft: true</code>を追加すると書きかけの記事とみなされて, ページが生成されません.</p>
+
+<p><code>top: true</code>とすると, トップページの一番上に張り付く記事になるみたいです. 使ったこと無いからわからないけど.</p>
+
+<p><code>preview</code>はトップページで表示される記事の概要を指定します. これを指定せずに, 記事の本体の適当な場所に<code>&lt;!--more--&gt;</code>を置くとその部分までを記事の概要として表示してくれます. ただし, Markdownを処理してくれないので<code>&lt;!--more--&gt;</code>は使わずに, <code>preview</code>を指定することをおすすめします.</p>
+
+<p><code>tags</code>で<code>PC</code>とか<code>食べ物</code>とか指定してあげるとタグごとのアーカイブページとか作ってくれます.</p>
+
+<p>以上が記事の情報です. <code>---</code>より下が本文となります. ここから下はMarkdown記法が使えます.</p>
+
+<p>これを踏まえると一番簡単な書式はこうなります.</p>
+
+<pre><code>title: タイトル
+date: 2016-06-05 7:00:00
+preview: テストです
+
+---
+
+テスト
+</code></pre>
+
+<p>これを<code>blog/source</code>の下に置いて, ファイル名を<code>タイトル.md</code>などとして保存してもいいのですが, それだと今後記事が増えた時にひっちゃかめっちゃかになる可能性が高いです.</p>
+
+<p>そこで, <code>blog/source/年/月/日</code>というふうにサブディレクトリを作るのがおすすめです. サブディレクトリを作っても記事のURIには何の影響も出ないので, 好きなように変更できます. 私は今のところ<code>blog/source/年/月</code>くらいにしてます.</p>
+
+<h3>ちゃんと生成されてるかチェックする</h3>
+
+<p>記事を書いたら, ちゃんとページが生成されるかテストしてみます. <code>./ink preview</code>というコマンドを実行することで, ページを生成して簡易的なサーバが起動します. <code>http://localhost:8000</code>でアクセスできます. ポート番号が8000だと都合がわるい場合は<code>blog/config.yml</code>で変更します.</p>
+
+<h3>テーマを修正する</h3>
+
+<p>ブログが生成されているかチェックすると, あることに気づきます. 投稿した時刻がおかしいんです. 設定ファイルで英語を指定したはずなのに,<code>分钟前</code>とか表示されます. どうもこの投稿時刻の表示はJavascriptで行われており, ここだけ言語の設定が反映されないみたいです.</p>
+
+<h4>まじめに直す</h4>
+
+<p>テーマは<code>blog/theme</code>にあり, 編集すべきファイルは<code>blog/theme/source/index.coffee</code>です.</p>
+
+<pre><code>timeSince = (date) -&gt;
+
+    seconds = Math.floor((new Date() - date) / 1000)
+    interval = Math.floor(seconds / 31536000)
+    if interval &gt; 1
+        return interval + &quot;年前&quot;
+    interval = Math.floor(seconds / 2592000)
+    if interval &gt; 1
+        return interval + &quot;个月前&quot;
+    interval = Math.floor(seconds / 86400)
+    if interval &gt; 1
+        return interval + &quot;天前&quot;
+    interval = Math.floor(seconds / 3600)
+    if interval &gt; 1
+        return interval + &quot;小时前&quot;
+    interval = Math.floor(seconds / 60)
+    if interval &gt; 1
+        return interval + &quot;分钟前&quot;
+    return Math.floor(seconds) + &quot;秒前&quot;
+</code></pre>
+
+<p>こんな記述があるので, 以下のように変更します.</p>
+
+<pre><code>timeSince = (date) -&gt;
+
+    seconds = Math.floor((new Date() - date) / 1000)
+    interval = Math.floor(seconds / 31536000)
+    if interval &gt; 1
+        return interval + &quot;年前&quot;
+    interval = Math.floor(seconds / 2592000)
+    if interval &gt; 1
+        return interval + &quot;ヶ月前&quot;
+    interval = Math.floor(seconds / 86400)
+    if interval &gt; 1
+        return interval + &quot;日前&quot;
+    interval = Math.floor(seconds / 3600)
+    if interval &gt; 1
+        return interval + &quot;時間前&quot;
+    interval = Math.floor(seconds / 60)
+    if interval &gt; 1
+        return interval + &quot;分前&quot;
+    return Math.floor(seconds) + &quot;秒前&quot;
+</code></pre>
+
+<p>編集が終わったら, webpackを実行します.</p>
+
+<p><code>blog/theme</code>に移動して, 以下のコマンドを実行します.</p>
+
+<pre><code>npm install
+
+./node_modules/webpack/bin/webpack.js
+</code></pre>
+
+<p>次に<code>ink</code>とか<code>blog</code>があるディレクトリに戻って, <code>./ink preview</code>を実行して確認してください. <code>10分前</code>みたいなかんじになっているはずです.</p>
+
+<h4>適当に直す</h4>
+
+<p>nodeとか入れてないしjsファイル直接編集するだけでいいでしょ, って言う方はこっちで.</p>
+
+<p><code>blog/theme/bundle/index.js</code>の1行目に, <code>个月前</code>とか<code>天前</code>とか書いてある部分があるはずなので, 修正します.</p>
+
+<p><code>./ink preview</code> で変更が反映されていることを確認します.</p>
+
+<h3>コマンドまとめ</h3>
+
+<p>記事を書いたら<code>./ink preview</code>で確認して, <code>./ink publish</code>でGithubにプッシュ, という流れになります. <code>./ink build</code>はテーマからcssやjsファイルをコピーしてくるコマンドですが, <code>preview</code>や<code>publish</code>のときにこのコマンドが走っているみたいなので自分で実行する必要がなく, 余り使いません</p>
+
+<h2>Github Pagesの使い方</h2>
+
+<p><a href="https://help.github.com/categories/github-pages-basics/">https://help.github.com/categories/github-pages-basics/</a>を読めばだいたい分かる.</p>
+
+<h3>リポジトリの作成とCNAMEの設定</h3>
+
+<p>githubで<code>blog</code>とか適当な名前のリポジトリを作ります. そうしたら, <code>blog</code>ディレクトリに移動して先ほど作ったリポジトリをcloneします. 次に<code>blog/public</code>を削除し, cloneしたリポジトリのを<code>public</code>にリネームします. リネームしたら<code>git checkout -b gh-pages</code>を実行します.</p>
+
+<p><code>blog/public/CNAME</code>ファイルを作成し, 使用するドメインをファイルの1行目に書き込みます. <code>jetzou.com</code>とか, <code>blog.jetzou.com</code>みたいな感じです. 書き込んだら, <code>git add CNAME</code>, <code>git commit -m &quot;add CNAME&quot;</code>というふうにCNAMEファイルを追加し,コミットしてください.</p>
+
+<p>コミットしたら, <code>git push --set-upstream origin gh-pages</code> を実行しておきます.</p>
+
+<p>Custom Domainを使わずに<code>dozen.github.io/blog</code>みたいな感じで使う人は<code>CNAME</code>ファイルの設定は不要です.</p>
+
+<h3>DNSの設定</h3>
+
+<p>Custom Domain使う人だけが必要な設定です. <a href="https://help.github.com/articles/setting-up-an-apex-domain/">https://help.github.com/articles/setting-up-an-apex-domain/<Paste></a>ここを参考にします.</p>
+
+<p>参考にするページにも書いてありますが, CNAMEレコードは使わないようにします. で, 今回はALIAS, ANAMEレコード非対応のDNSサービスを利用するため, Aレコードを使った設定をします.</p>
+
+<p>DNSに<code>192.30.252.153</code>と<code>192.30.252.154</code>のAレコードを追加すればいいっぽいので, 追加します.</p>
+
+<h3>InkPaperの設定ファイルを修正する</h3>
+
+<p><code>blog/config.yml</code>の<code>utl</code>を変更します. 必要な場合は<code>root</code>をアンコメントします.</p>
+
+<h3>記事をGithub Pagesに反映</h3>
+
+<p>ここまでの設定を終えて, 記事を書いたら<code>./ink publish</code>を実行します. これで, Github Pages上のブログにアクセスできるようになっているはずです</p>
+
+<hr />
+
+<p>InkPaperとGithub Pagesの使い方はざっとこんな感じです.</p>
+
+<p>InkPaperに関する日本語の記事があんまりないのが悲しいです. 日本で使ってる人が増えたらいいな. 🐘</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんとよみます</div>
+                </section>
+                <section class="recommend">
+                    
+                    <section class="nav prev more">
+                        <div class="head">新しい記事</div>
+                        <a class="link" href="/2016/06/25.html">Munin pluginの作成</a>
+                    </section>
+                    
+                    
+                    <section class="nav next more">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/2016/06/03.html">Github PagesとInkPaperでブログを始める</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェット・ゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.chole.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+        <div id="go_top" style="position:fixed; LEFT:85%; bottom:50px">
+            <svg width="30" height="30" viewBox="0 0 878 1024">
+                <path fill="#8a8a8a" d="M733.714 511.429c0-9.714-3.429-18.857-10.286-25.714l-258.857-258.857c-6.857-6.857-16-10.286-25.714-10.286s-18.857 3.429-25.714 10.286l-258.857 258.857c-6.857 6.857-10.286 16-10.286 25.714s3.429 18.857 10.286 25.714l52 52c6.857 6.857 16 10.286 25.714 10.286s18.857-3.429 25.714-10.286l108-108v286.857c0 20 16.571 36.571 36.571 36.571h73.143c20 0 36.571-16.571 36.571-36.571v-286.857l108 108c6.857 6.857 16 10.857 25.714 10.857s18.857-4 25.714-10.857l52-52c6.857-6.857 10.286-16 10.286-25.714zM877.714 512c0 242.286-196.571 438.857-438.857 438.857s-438.857-196.571-438.857-438.857 196.571-438.857 438.857-438.857 438.857 196.571 438.857 438.857z"></path>
+            </svg>
+        </div>
+    </body>
+</html>

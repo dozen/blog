@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<meta name="renderer" content="webkit">
+<meta name="google" value="notranslate">
+<meta name="robots" content="index,follow">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ジェット・ゾウ">
+<meta name="twitter:description" content="🚀ビューン🐘">
+<meta name="twitter:image:src" content="http:/jetzou.com/images/avatar.png">
+
+<meta property="og:url" content="http:/jetzou.com">
+<meta property="og:title" content="ジェット・ゾウ">
+<meta property="og:description" content="🚀ビューン🐘">
+<meta property="og:site_name" content="ジェット・ゾウ">
+<meta property="og:image" content="http:/jetzou.com/images/avatar.png">
+<meta property="og:type" content="website">
+<meta name="robots" content="noodp">
+
+<meta itemprop="name" content="ジェット・ゾウ">
+<meta itemprop="description" content="🚀ビューン🐘">
+<meta itemprop="image" content="http:/jetzou.com/images/avatar.png">
+
+<link rel="canonical" href="http:/jetzou.com">
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+
+        <meta name="keywords" content="perl,github,munin,softether,">
+        <meta name="description" content="Munin pluginの作成">
+        <meta name="author" content="dozen">
+        <title>Munin pluginの作成</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェット・ゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">Munin pluginの作成</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1466856000"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/perl/index.html">perl</a><a class="tag" href="/tag/github/index.html">github</a><a class="tag" href="/tag/munin/index.html">munin</a><a class="tag" href="/tag/softether/index.html">softether</a></span>
+                </section>
+                <article class="content"><p>Softetherの転送量をMuninでグラフ化する<a href="https://github.com/dozen/softether-munin" target="_blank">softether-plugin</a>を作りました.</p>
+
+<p>今回は <code>Plugin::Munin</code>, <code>Plugin::Munin::Framework</code> を使いましたが, これらのモジュールを使った自作プラグインの作り方について解説しているサイトが全然見つからなかったので, 紹介します.</p>
+
+<p>情報少ないしこのモジュールはMunin v2.1以上じゃないと動かないし, 後述する <code>negative</code> を指定したグラフがたまにうまく描画できなかったりと, プラグインの作成方法としては結構微妙であることを先に書いておきます.</p>
+
+<h2>Plugin::Munin::Frameworkについて</h2>
+
+<p>softether-pluginはPlugin::Munin::Frameworkというモジュールを使っていますが, これについての詳細はよくわかりません.
+というのも, このプラグインを書いたのは1年前で, 当時参考にしていたWebサイトが見つからなかったからです.</p>
+
+<p>Munin公式のプラグインで使われているようですがとにかくWeb上に情報が載ってないです.
+munin 2.1.9-1では少なくともMunin公式のプラグインで <code>Munin::Plugin</code> , <code>Munin::Plugin::Framework</code> が使われています.
+しかし munin 2.0.25 ではそのようなプラグインは使用されておらず, またそれらを使ったプラグインは動きません. CPANにはこの2つのモジュールは無かったので, これらのモジュールを使いたい場合は対応したバージョンのmuninをインストールするしかなさそうです.</p>
+
+<p>そんなよくわからないものを使って大丈夫なのかよという感じですが, 動くし, 簡単にプラグインが書けるっぽいのでよしとします.</p>
+
+<h2>自作プラグインで実現したいこと</h2>
+
+<p>プラグインを自作する上で実現したいのは以下の3つです.</p>
+
+<ol>
+<li>softether_myhub のようなシンボリックリンクを張るとmyhubのグラフを作ってくれる</li>
+<li>Softetherのホスト名とかHubのパスワードはmunin-node.conf.d/munin-nodeにかける</li>
+<li>Virtual HUB単位で転送量, パケット数をグラフ化</li>
+</ol>
+
+<p>グラフ化できることはもちろんですが, Muninのプラグインらしく, シンボリックリンクで監視対象のデバイスを指定したり, munin-node.conf.d/munin-node に書いたconfigが読めるようにしたいです.</p>
+
+<h2>プラグインの作成</h2>
+
+<p>softether-muninのソースコードを使って解説していきます.</p>
+
+<h3>シンボリックリンク名でVirtual Hubを指定</h3>
+
+<p>Muninのプラグインでありがちな, 実体が <code>if_</code> というファイルで <code>if_eth0</code> というシンボリックリンクを張るとeth0についてのグラフを作成する, というのを真似したい.</p>
+
+<p>プラグイン <code>softether_</code> のシンボリックリンク名を読み取る部分はこうなります.</p>
+
+<pre><code class="language-perl">my $hub;
+
+if ($0 =~ /softether_([\w\d#-_.&amp;]+)$/) {
+  $hub = $1;
+} else {
+  die (&quot;Can't run config without a symlinked name&quot;);
+}
+</code></pre>
+
+<p>これで <code>softether_myhub</code> というシンボリックリンクを張れば <code>$hub</code> に <code>myhub</code> が入り, あとで好きに使えます.</p>
+
+<h3>munin-node.conf.dにあるConfigを読み込む</h3>
+
+<p>ホスト名, パスワード, vpncmdのパスを設定ファイルから読み込めるようにします.</p>
+
+<p>ソースコードはこんな感じです.</p>
+
+<pre><code class="language-perl">unless (defined $ENV{host}) {
+  $ENV{host} = &quot;localhost&quot;;
+}
+
+unless (defined $ENV{password}) {
+  die (&quot;Please set password&quot;);
+}
+
+unless (defined $ENV{vpncmdpath}) {
+  $ENV{vpncmdpath} = &quot;/usr/local/vpnserver/vpncmd&quot;;
+}
+</code></pre>
+
+<p>対応するmunin-node.conf.dの設定は以下のようになります</p>
+
+<pre><code>[softether_*]
+env.password myvpnpassword
+env.host localhost
+env.vpncmdpath /usr/local/vpnserver/vpncmd
+</code></pre>
+
+<p>ホスト名とvpncmdのパスはデフォルト値をプラグインのソースコードで指定しているので, 設定ファイルには書かなくても動きます.
+設定ファイルに <code>env.password</code> と書いた場合はPerlの場合だと <code>$ENV{password}</code> みたいな感じでアクセスできるみたいです.</p>
+
+<h3>値の取得とか, 描画したいグラフの設定</h3>
+
+<pre><code class="language-perl">my @item_key = (
+&quot;Outgoing Unicast Packets&quot;,
+&quot;Outgoing Unicast Total Size&quot;,
+&quot;Outgoing Broadcast Packets&quot;,
+&quot;Outgoing Broadcast Total Size&quot;,
+&quot;Incoming Unicast Packets&quot;,
+&quot;Incoming Unicast Total Size&quot;,
+&quot;Incoming Broadcast Packets&quot;,
+&quot;Incoming Broadcast Total Size&quot;,
+);
+
+my $result = `$ENV{vpncmdpath} $ENV{host} /SERVER /password:$ENV{password} /hub:$hub /cmd StatusGet`;
+
+my %data;
+
+sub get_value {
+  my $tmp;
+  my $key = shift;
+  if ($result =~ /$key\s*\|([0-9,]+)/) {
+    $tmp = $1;
+    $tmp =~ s/,//g;
+    return $tmp;
+  }
+}
+
+for my $item (@item_key) {
+  $data{$item} = get_value($item);
+}
+</code></pre>
+
+<p>こんな感じです.  <code>$result</code> には以下のような結果が入るので, 欲しい値を <code>@item_key</code> に登録しておいて取って来ています</p>
+
+<pre><code>StatusGet
+vpncmd command - SoftEther VPN Command Line Management Utility
+SoftEther VPN Command Line Management Utility (vpncmd command)
+Version 4.19 Build 9605   (English)
+Compiled 2016/03/06 21:09:57 by yagi at pc30
+Copyright (c) SoftEther VPN Project. All Rights Reserved.
+
+Connection has been established with VPN Server &quot;localhost&quot; (port 443).
+
+You have administrator privileges for Virtual Hub 'vpn' on the VPN Server.
+
+VPN Server/vpn&gt;StatusGet
+StatusGet command - Get Current Status of Virtual Hub
+Item                         |Value
+-----------------------------+---------------------
+Virtual Hub Name             |vpn
+Status                       |Online
+Type                         |Standalone
+SecureNAT                    |Enabled
+Sessions                     |2
+Sessions (Client)            |1
+Sessions (Bridge)            |0
+Access Lists                 |0
+Users                        |1
+Groups                       |0
+MAC Tables                   |3
+IP Tables                    |3
+Num Logins                   |54
+Last Login                   |2016-06-25 19:12:43
+Last Communication           |2016-06-25 21:22:15
+Created at                   |2016-04-04 00:12:46
+Outgoing Unicast Packets     |157,138,736 packets
+Outgoing Unicast Total Size  |133,078,817,603 bytes
+Outgoing Broadcast Packets   |477,735 packets
+Outgoing Broadcast Total Size|31,355,040 bytes
+Incoming Unicast Packets     |157,166,519 packets
+Incoming Unicast Total Size  |133,081,898,141 bytes
+Incoming Broadcast Packets   |2,833,614 packets
+Incoming Broadcast Total Size|174,223,220 bytes
+The command completed successfully.
+</code></pre>
+
+<h3>Munin::Plugin::Framework でグラフ作成</h3>
+
+<p>Muninのプラグインは引数にconfを渡した時はグラフの設定を吐かないといけなかったりとか色々あるんですが, そのへんをよしなにやってくれるのが <code>Munin::Plugin::Framework</code> です. だと思います.</p>
+
+<p>これを使えば設定ファイルを書くイメージでサクサクっとプラグインを作れます.</p>
+
+<pre><code class="language-perl">my $plugin = Munin::Plugin::Framework-&gt;new;
+
+$plugin-&gt;add_graphs(
+  packets =&gt; {
+    args =&gt; &quot;&quot;,
+    category =&gt; $category,
+    info =&gt; &quot;$hub Packets&quot;,
+    title =&gt; &quot;$hub Packets&quot;,
+    vlabel =&gt; &quot;in (-) | out (+) packets / second&quot;,
+    fields =&gt; {
+      unicast_out =&gt; {
+        label =&gt; &quot;Unicast&quot;,
+	type =&gt; &quot;DERIVE&quot;,
+	min =&gt; 0,
+	negative =&gt; &quot;unicast_in&quot;,
+	value =&gt; $data{&quot;Outgoing Unicast Packets&quot;}
+      },
+      unicast_in =&gt; {
+        type =&gt; &quot;DERIVE&quot;,
+	min =&gt; 0,
+	value =&gt;  $data{&quot;Incoming Unicast Packets&quot;}
+      }
+    }
+  },
+  unicast_total_packets =&gt; {
+    args =&gt; &quot;&quot;,
+    category =&gt; $category,
+    info =&gt; &quot;$hub Unicast Toatl Packets&quot;,
+    title =&gt; &quot;$hub Unicast Total Packets&quot;,
+    vlabel =&gt; &quot;packets&quot;,
+    fields =&gt; {
+      incoming =&gt; {
+        label =&gt; &quot;Incoming&quot;,
+        type =&gt; &quot;GAUGE&quot;,
+        min =&gt; 0,
+        value =&gt; $data{&quot;Incoming Unicast Packets&quot;}
+      },
+      outgoing =&gt; {
+        label =&gt; &quot;Outgoing&quot;,
+        type =&gt; &quot;GAUGE&quot;,
+        draw =&gt; &quot;AREA&quot;,
+        min =&gt; 0,
+        value =&gt; $data{&quot;Outgoing Unicast Packets&quot;}
+      }
+    }
+  }
+);
+
+$plugin-&gt;run();
+</code></pre>
+
+<p>こんな感じで <code>add_graphs()</code> でどんどん追加していくだけ.
+カテゴリは <code>softether</code> とかにしてます.</p>
+
+<ul>
+<li>args: グラフの下限値, 上限値, 対数スケールでプロット などを指定するところ</li>
+<li>category: [ disk munin network processes system time ]みたいなの, あれです. すでにあるものに追加したりとか, <code>softether</code> みたいに新しいカテゴリを作ることも出来ます</li>
+<li>vlabel: グラフの縦軸の表示名.</li>
+<li>fields: 描画したいデータについて記述する
+
+<ul>
+<li>type: <code>DERIVE</code> だと前の値との差, <code>GAUGE</code> だと値をそのまま出力</li>
+<li>negative: NICのスループットとかのグラフでoutが上方向, inが下方向にグラフが伸びてますが, あれを実現するためのものです. <code>negative</code> に指定したキーのフィールドがマイナス方向に描画されるようになります.</li>
+</ul></li>
+</ul>
+
+<p>だいたいこんな感じなんですが, <code>Munin::Plugin::Framework</code> で <code>negative</code> を指定するとたまーにグラフの生成に失敗します.
+RRDToolがエラーを吐いてますが, 原因はよくわかりません. この辺はちょっと微妙な感じですね.
+<code>negative</code> を使わなければいいんですがSoftetherプラグインでグラフ化したいものはおおかたIn/OutがあるのでOutを上方向, Inを下方向に伸ばすグラフのほうがしっくり来ますし.</p>
+
+<h3>プラグインの全体図, 生成されるグラフ</h3>
+
+<p><a href="https://github.com/dozen/softether-munin" target="_blank">github</a>を見てください. 🐘</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんとよみます</div>
+                </section>
+                <section class="recommend">
+                    
+                    <section class="nav prev more">
+                        <div class="head">新しい記事</div>
+                        <a class="link" href="/2016/06/26.html">ElasticSearch &#43; Kibanaでサーバのリソース監視</a>
+                    </section>
+                    
+                    
+                    <section class="nav next more">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/2016/06/05.html">InkPaperとGithub Pagesの使い方</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェット・ゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.chole.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+        <div id="go_top" style="position:fixed; LEFT:85%; bottom:50px">
+            <svg width="30" height="30" viewBox="0 0 878 1024">
+                <path fill="#8a8a8a" d="M733.714 511.429c0-9.714-3.429-18.857-10.286-25.714l-258.857-258.857c-6.857-6.857-16-10.286-25.714-10.286s-18.857 3.429-25.714 10.286l-258.857 258.857c-6.857 6.857-10.286 16-10.286 25.714s3.429 18.857 10.286 25.714l52 52c6.857 6.857 16 10.286 25.714 10.286s18.857-3.429 25.714-10.286l108-108v286.857c0 20 16.571 36.571 36.571 36.571h73.143c20 0 36.571-16.571 36.571-36.571v-286.857l108 108c6.857 6.857 16 10.857 25.714 10.857s18.857-4 25.714-10.857l52-52c6.857-6.857 10.286-16 10.286-25.714zM877.714 512c0 242.286-196.571 438.857-438.857 438.857s-438.857-196.571-438.857-438.857 196.571-438.857 438.857-438.857 438.857 196.571 438.857 438.857z"></path>
+            </svg>
+        </div>
+    </body>
+</html>

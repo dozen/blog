@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=1">
+<meta name="renderer" content="webkit">
+<meta name="google" value="notranslate">
+<meta name="robots" content="index,follow">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ジェット・ゾウ">
+<meta name="twitter:description" content="🚀ビューン🐘">
+<meta name="twitter:image:src" content="http:/jetzou.com/images/avatar.png">
+
+<meta property="og:url" content="http:/jetzou.com">
+<meta property="og:title" content="ジェット・ゾウ">
+<meta property="og:description" content="🚀ビューン🐘">
+<meta property="og:site_name" content="ジェット・ゾウ">
+<meta property="og:image" content="http:/jetzou.com/images/avatar.png">
+<meta property="og:type" content="website">
+<meta name="robots" content="noodp">
+
+<meta itemprop="name" content="ジェット・ゾウ">
+<meta itemprop="description" content="🚀ビューン🐘">
+<meta itemprop="image" content="http:/jetzou.com/images/avatar.png">
+
+<link rel="canonical" href="http:/jetzou.com">
+
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="apple-itouch-icon" href="/favicon.png">
+<link rel="stylesheet" href="/bundle/index.css">
+<script type="text/javascript">
+    var timeSinceLang = {
+        year: '年前',
+        month: 'ヶ月前',
+        day: '日前',
+        hour: '時間前',
+        minute: '分前',
+        second: '秒前'
+    };
+    var root = '';
+</script>
+
+<script type="text/javascript">
+    var conn, reloadTimer, connectTimer;
+    var connect = function() {
+        conn = new WebSocket('ws://' + location.host + '/live');
+        conn.onmessage = function(event) {
+            if (event.data === 'change') {
+                if (reloadTimer) clearTimeout(reloadTimer);
+                reloadTimer = setTimeout(function() {
+                    window.location.reload();
+                }, 200);
+            }
+        };
+        conn.onclose = function() {
+            if (connectTimer) clearTimeout(connectTimer);
+            connectTimer = setTimeout(function() {
+                connect();
+            }, 1000);
+        };
+    };
+    connect();
+</script>
+
+
+        <meta name="keywords" content="ISUCON,">
+        <meta name="description" content="ISUCON 7 で優勝してきました">
+        <meta name="author" content="dozen">
+        <title>ISUCON 7 で優勝してきました</title>
+    </head>
+    <body>
+        <article class="container">
+            <header class="header-wrap">
+  <a class="index" href="/">
+    <img class="logo" src="/images/avatar.png" />
+    ジェット・ゾウ
+  </a>
+  <ul class="menu">
+      <li class="menu-item"><a href="/archive.html">アーカイブ</a></li>
+      <li class="menu-item"><a href="/tag.html">タグ</a></li>
+      <li class="menu-item"><a href="/atom.xml">RSS</a></li>
+  </ul>
+</header>
+
+            <article class="main article">
+                <h1 class="title">ISUCON 7 で優勝してきました</h1>
+                <section class="info">
+                    <span class="avatar" style="background-image: url(/images/avatar.png);"></span>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    
+                    <span class="date" data-time="1511881200"><span class="from"></span></span>
+                    
+                    <span class="tags"><a class="tag" href="/tag/ISUCON/index.html">ISUCON</a></span>
+                </section>
+                <article class="content"><h2>謝辞</h2>
+
+<p>チームMSAのken39argさん、mizkeiさん、ありがとうございました。
+ISUCON運営に関わられた皆さんどうもありがとうございました。</p>
+
+<h2>出題</h2>
+
+<p><a href="https://github.com/isucon/isucon7-final/blob/master/manual.pdf">https://github.com/isucon/isucon7-final/blob/master/manual.pdf</a></p>
+
+<p>ISUCON 7本戦のマニュアルが公開されておりますので、参照ください。</p>
+
+<p>簡単に構成を紹介すると、CPU 2コア, メモリ2GB, ネットワーク帯域500Mbpsのサーバが4台で、うち3台がnginx + appサーバで1台がDBサーバという状態でした。</p>
+
+<p>Websocketという単語が出題ムービー(?)で出てきて全然わからないけど大丈夫かな…っていうのと、仕様の説明が全く理解できなくてポカーンとしてしまい初っ端から意識を失いかけました。</p>
+
+<h2>やったこと</h2>
+
+<ul>
+<li>環境整備</li>
+<li>サーバのメトリクス監視</li>
+<li>ミドルウェアのチューニング・構成変更</li>
+</ul>
+
+<p>予選同様、アプリ側の改善はken39argさん、mizkeiさんにやってもらい、私は環境整備とインフラ側を分担するという役割です。
+環境整備をしてる間にミドルウェアの設定をrepoに入れたりとかはインフラ側の仕事っぽいですが、これはken39argさんがササッっとやってくださいました。</p>
+
+<h3>競技開始</h3>
+
+<p>予選同様、まず環境整備に取り組みました。</p>
+
+<ul>
+<li>パスワードなしでログインできるようにする</li>
+<li>サーバ間の行き来を簡単にする</li>
+<li>PRベースで開発できるようにgoのソースをrepoに入れる</li>
+<li>makeでデプロイ自動化</li>
+</ul>
+
+<p>予選と同じことをするだけだったはずなんですが、手間取ってしまった上、デプロイ自動化のためのMakefileはバグってるものをmergeしてしまったりという感じでした。</p>
+
+<h3>初期構成でベンチ</h3>
+
+<p>初期構成でベンチをかけたところ、appサーバ、DBサーバ共にすべてのリソースが余っている状況で、DBは10~20%くらいのiowaitが発生していました。
+CPUが遊んでいてメモリも余っている、ネットワークもディスクもそれほどスループットが出ているわけではない、一見してボトルネックらしいボトルネックが確認できなかったのですが、この時点ではDBかな?と思っていました。</p>
+
+<h3>その後</h3>
+
+<p>アプリの改善がいくつか入った後も余りスコアが伸びず、やはりリソースは余っており何がボトルネックになっているのか依然としてつかめませんでした。</p>
+
+<p>DBのiowaitが足を引っ張っているのかと疑ってみて、MySQLの様子を見てみることにしました。
+とりあえず innodb buffer pool を確認してみましたが、128MBでも余っているので関係ないと判断していじらずに放置。
+innodb buffer pool が余っていることと、クエリの比率を見てみたところ更新系の比率が高かったことを考え、 innodb_flush_log_at_trx_commit かなと思い
+<code>innodb_flush_log_at_trx_commit=0</code> を設定したところiowaitがなくなりました。
+iowaitが消滅したisu4のCPUは完全に遊んでいて、DBがボトルネックじゃなかったんだと気付きます。
+最初にアプリの二人にボトルネックはDBですかね…と間違ったことを伝えてしまったので、早い段階で正しい判断ができていればもっと良い方向へ向かったかもしれません。</p>
+
+<p>アプリ側の改善がその後続き、だんだんとappサーバのCPU使用率が上昇し、CPUを使えている状態になっていきました。
+MySQLはというとどんどん参照系のクエリが減少し、更新系の占める比率が上昇していく流れでした。</p>
+
+<p>最終的にはisu4のCPU使用率が1%とかになっていたため、これはもうisu4にもappサーバ置くべきだろうということになり、全台にappを置くことにしました。</p>
+
+<h2>結局私は何をやったのか?</h2>
+
+<p>スコアに寄与する変更は</p>
+
+<ul>
+<li>isu4に app を配置した</li>
+<li>mysqlに innodb_flush_log_at_trx_commit=0 を設定した</li>
+</ul>
+
+<p>の2つしかありません。そして <code>innodb_flush_log_at_trx_commit</code> はiowaitの20%分くらいを稼いだに過ぎないので、贔屓目に見てもせいぜい1000くらいしか加点になっていないのでは無いかと思います。</p>
+
+<h2>迷走中にしたこと</h2>
+
+<p>その他にもMySQLのパラメータに問題がないか疑ってみたり、アプリのチューニング以外にできることはないかと思っていくつか取り組んだことがありますが、これらに特に意味はなかったようです。</p>
+
+<h3>nginxでgzip_static の設定, worker_connections を増やす</h3>
+
+<p>これは迷走ではなくまっとうなチューニングですが、スコアが低下したため不採用。
+worker_connectionsは適当に増やしたのでまっとうとは言えないかもしれないです。</p>
+
+<h3>HTTP2</h3>
+
+<ul>
+<li>FQDNが与えられている</li>
+<li>nginxになんかSSLの設定が入っている</li>
+<li>appのCPUは遊んでいる</li>
+<li>worker_connection 増やしても接続数上がらない</li>
+</ul>
+
+<p>ということで、ベンチマーカはTCP層で接続数をしぼっているが、HTTP2にすると並列度が上がるというパターンなのではないか?みたいな雰囲気でやっていました。
+結局のところ、アプリのチューニングでCPU使用率が上ってきたため、これは違うなと考えて捨てました。
+Let&rsquo;s Encryptで4台分の証明書を作るといった奇行をしていましたが、これは懇親会で先輩に話したときけっこう受けたので、最悪に不毛だったんですが良しとします。</p>
+
+<h2>振り返り</h2>
+
+<p>他のチームと比べると明らかにインフラがプアで、このチーム編成で優勝できたのはアプリがヘビーだったからだと思っています。</p>
+
+<p>自分ができるやつだとは思っていないつもりですが、ここまでしょぼいとだいぶ凹みます。
+チームとしては優勝できましたが、これは完全にken39argさんとmizkeiさんのおかげでしかありませんね。</p>
+
+<p>とはいえ優勝できたのはとても嬉しいです。mizkeiさん、ken39argさん、本当にありがとうございました。
+このチームでISUCONに参加できてとても良かったと思います。</p>
+
+<p>自分の未熟さを知る良い機会でした。この事実を受け止め、精進します🐘</p>
+</article>
+                <section class="author">
+                    <div class="avatar" style="background-image: url(/images/avatar.png);"></div>
+                    <a class="name" href="/about.me.html">dozen</a>
+                    <div class="intro">どぜんとよみます</div>
+                </section>
+                <section class="recommend">
+                    
+                    
+                    <section class="nav next">
+                        <div class="head">古い記事</div>
+                        <a class="link" href="/misc/2017/10/26.html">ISUCON 7 予選1日目を1位で通過して来ました</a>
+                    </section>
+                    
+                </section>
+                
+    <section id="disqus_thread"></section>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//jet-zou.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+            </article>
+        </article>
+        <footer class="footer">
+    <span class="copyright">
+        ジェット・ゾウ ©
+        <script type="text/javascript">
+            document.write(new Date().getFullYear());
+        </script>
+    </span>
+    <span class="publish">Powered by <a href="http://www.chole.io/" target="_blank">Ink</a></span>
+</footer>
+
+        <script src="/bundle/index.js"></script>
+        <div id="go_top" style="position:fixed; LEFT:85%; bottom:50px">
+            <svg width="30" height="30" viewBox="0 0 878 1024">
+                <path fill="#8a8a8a" d="M733.714 511.429c0-9.714-3.429-18.857-10.286-25.714l-258.857-258.857c-6.857-6.857-16-10.286-25.714-10.286s-18.857 3.429-25.714 10.286l-258.857 258.857c-6.857 6.857-10.286 16-10.286 25.714s3.429 18.857 10.286 25.714l52 52c6.857 6.857 16 10.286 25.714 10.286s18.857-3.429 25.714-10.286l108-108v286.857c0 20 16.571 36.571 36.571 36.571h73.143c20 0 36.571-16.571 36.571-36.571v-286.857l108 108c6.857 6.857 16 10.857 25.714 10.857s18.857-4 25.714-10.857l52-52c6.857-6.857 10.286-16 10.286-25.714zM877.714 512c0 242.286-196.571 438.857-438.857 438.857s-438.857-196.571-438.857-438.857 196.571-438.857 438.857-438.857 438.857 196.571 438.857 438.857z"></path>
+            </svg>
+        </div>
+    </body>
+</html>
