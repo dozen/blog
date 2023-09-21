@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>ジェット・ゾウ</title>
-  <id>http:/jetzou.com</id>
-  <updated>2018-05-01T10:27:59+09:00</updated>
+  <id>https:/blog.jetzou.com</id>
+  <updated>2023-09-22T01:31:58+09:00</updated>
   <subtitle>🚀ビューン🐘</subtitle>
-  <link href="http:/jetzou.com"></link>
+  <link href="https:/blog.jetzou.com"></link>
   <author>
     <name>ジェット・ゾウ</name>
   </author>
   <entry>
     <title>ISUCON 7 で優勝してきました</title>
     <updated>2017-11-29T00:00:00+09:00</updated>
-    <id>tag:,2017-11-29:/jetzou.com/2017/11/29.html</id>
-    <link href="http:/jetzou.com/2017/11/29.html" rel="alternate"></link>
+    <id>tag:,2017-11-29:/blog.jetzou.com/2017/11/29.html</id>
+    <link href="https:/blog.jetzou.com/2017/11/29.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;チームMSAとしてISUCON 7 本戦に出場しました&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -20,8 +20,8 @@
   <entry>
     <title>ISUCON 7 予選1日目を1位で通過して来ました</title>
     <updated>2017-10-26T03:00:00+09:00</updated>
-    <id>tag:,2017-10-26:/jetzou.com/2017/10/26.html</id>
-    <link href="http:/jetzou.com/2017/10/26.html" rel="alternate"></link>
+    <id>tag:,2017-10-26:/blog.jetzou.com/2017/10/26.html</id>
+    <link href="https:/blog.jetzou.com/2017/10/26.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;チームMSAのインフラ担当として参加して来ました&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -30,8 +30,8 @@
   <entry>
     <title>systemd-modules-loadがコケる</title>
     <updated>2017-05-06T00:30:00+09:00</updated>
-    <id>tag:,2017-05-06:/jetzou.com/2017/05/06.html</id>
-    <link href="http:/jetzou.com/2017/05/06.html" rel="alternate"></link>
+    <id>tag:,2017-05-06:/blog.jetzou.com/2017/05/06.html</id>
+    <link href="https:/blog.jetzou.com/2017/05/06.html" rel="alternate"></link>
     <summary type="html"></summary>
     <author>
       <name>dozen</name>
@@ -40,8 +40,8 @@
   <entry>
     <title>RaspberryPi2用のRTCもどきを作る</title>
     <updated>2017-05-05T06:00:00+09:00</updated>
-    <id>tag:,2017-05-05:/jetzou.com/2017/05/05.html</id>
-    <link href="http:/jetzou.com/2017/05/05.html" rel="alternate"></link>
+    <id>tag:,2017-05-05:/blog.jetzou.com/2017/05/05.html</id>
+    <link href="https:/blog.jetzou.com/2017/05/05.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;再起動したときntpで同期できないのが辛いので&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -50,8 +50,8 @@
   <entry>
     <title>Base128を作りました．</title>
     <updated>2016-10-24T08:58:00+09:00</updated>
-    <id>tag:,2016-10-24:/jetzou.com/2016/10/24.html</id>
-    <link href="http:/jetzou.com/2016/10/24.html" rel="alternate"></link>
+    <id>tag:,2016-10-24:/blog.jetzou.com/2016/10/24.html</id>
+    <link href="https:/blog.jetzou.com/2016/10/24.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;英数字とひらがなでエンコードします&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -60,8 +60,8 @@
   <entry>
     <title>Shift_JISのXMLをGoでパースする</title>
     <updated>2016-10-18T06:24:00+09:00</updated>
-    <id>tag:,2016-10-18:/jetzou.com/2016/10/18.html</id>
-    <link href="http:/jetzou.com/2016/10/18.html" rel="alternate"></link>
+    <id>tag:,2016-10-18:/blog.jetzou.com/2016/10/18.html</id>
+    <link href="https:/blog.jetzou.com/2016/10/18.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;Shift_JISのXMLファイルをencoding/xmlで扱う方法&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -70,8 +70,8 @@
   <entry>
     <title>音楽の再生環境を変えた</title>
     <updated>2016-08-25T13:00:00+09:00</updated>
-    <id>tag:,2016-08-25:/jetzou.com/2016/08/25.html</id>
-    <link href="http:/jetzou.com/2016/08/25.html" rel="alternate"></link>
+    <id>tag:,2016-08-25:/blog.jetzou.com/2016/08/25.html</id>
+    <link href="https:/blog.jetzou.com/2016/08/25.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;いままでx-アプリでCDをリッピングしてたんですが，やめました&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -80,8 +80,8 @@
   <entry>
     <title>Shell ScriptでCGIカウンター</title>
     <updated>2016-08-22T00:05:00+09:00</updated>
-    <id>tag:,2016-08-22:/jetzou.com/2016/08/22.html</id>
-    <link href="http:/jetzou.com/2016/08/22.html" rel="alternate"></link>
+    <id>tag:,2016-08-22:/blog.jetzou.com/2016/08/22.html</id>
+    <link href="https:/blog.jetzou.com/2016/08/22.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;CGIカウンターとか懐かしくないですか?&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -90,8 +90,8 @@
   <entry>
     <title>ElasticSearch + Kibanaでサーバのリソース監視</title>
     <updated>2016-06-26T00:00:00+09:00</updated>
-    <id>tag:,2016-06-26:/jetzou.com/2016/06/26.html</id>
-    <link href="http:/jetzou.com/2016/06/26.html" rel="alternate"></link>
+    <id>tag:,2016-06-26:/blog.jetzou.com/2016/06/26.html</id>
+    <link href="https:/blog.jetzou.com/2016/06/26.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;fluentdの設定ファイルを他所から丸パクリしたら動かなかった&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>
@@ -100,8 +100,8 @@
   <entry>
     <title>Munin pluginの作成</title>
     <updated>2016-06-25T21:00:00+09:00</updated>
-    <id>tag:,2016-06-25:/jetzou.com/2016/06/25.html</id>
-    <link href="http:/jetzou.com/2016/06/25.html" rel="alternate"></link>
+    <id>tag:,2016-06-25:/blog.jetzou.com/2016/06/25.html</id>
+    <link href="https:/blog.jetzou.com/2016/06/25.html" rel="alternate"></link>
     <summary type="html">&lt;p&gt;Plugin::Munin, Plugin::Munin::Frameworkを使ってMunin pluginを自作する&lt;/p&gt;&#xA;</summary>
     <author>
       <name>dozen</name>

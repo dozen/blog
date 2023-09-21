@@ -4,7 +4,7 @@ site:
     limit: 10
     theme: theme
     lang: ja
-    url: "http:/jetzou.com/"
+    url: "https:/blog.jetzou.com/"
     comment: jet-zou
     #logo: "-/images/avatar.png"
     link: "{year}/{month}/{day}.html"
